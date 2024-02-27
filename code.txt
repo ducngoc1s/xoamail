@@ -14,16 +14,15 @@ function main() {
         }
     }
 }
-
-
-function xoaNguoiDung(khoaNguoiDung, chiSoHang) {
-    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+function xoaUser(userKey, rowIndex) {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     try {
-        AdminDirectory.Users.remove(khoaNguoiDung);
-        bang.getRange(chiSoHang, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
-        Logger.log('Người dùng đã được xóa thành công: ' + khoaNguoiDung);
+        AdminDirectory.Users.remove(userKey);
+        sheet.getRange(rowIndex, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
+        Logger.log('User has been successfully deleted: ' + userKey);
     } catch (e) {
-        bang.getRange(chiSoHang, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
-        Logger.log('Lỗi khi xóa người dùng ' + khoaNguoiDung + ': ' + e.toString());
+        sheet.getRange(rowIndex, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
+        Logger.log('Lỗi khi xóa ' + userKey + ': ' + e.toString());
     }
 }
+

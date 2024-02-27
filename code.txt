@@ -1,35 +1,23 @@
 function main() {
-    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var soDongCuoi = bang.getLastRow();
-    var cotNguoiDung = 1;
-    var kichThuocLan = 1000;
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var lastRow = sheet.getLastRow();
+    var userColumn = 1;
 
-    for (var dongBatDau = 1; dongBatDau <= soDongCuoi; dongBatDau += kichThuocLan) {
-        var dongKetThuc = Math.min(dongBatDau + kichThuocLan - 1, soDongCuoi);
-        xuLyLan(bang, dongBatDau, dongKetThuc, cotNguoiDung);
-    }
-}
-
-function xuLyLan(bang, dongBatDau, dongKetThuc, cotNguoiDung) {
-    for (var i = dongBatDau; i <= dongKetThuc; i++) {
-        var khoaNguoiDung = bang.getRange(i, cotNguoiDung).getValue();
-        if (khoaNguoiDung) {
-            var khoaNguoiDungPhan = khoaNguoiDung.split('|');
-            var khoaNguoiDungTruocDauCach = khoaNguoiDungPhan[0].trim(); 
-
-            xoaNguoiDung(khoaNguoiDungTruocDauCach, i);
+    for (var i = 1; i <= lastRow; i++) {
+        var userKey = sheet.getRange(i, userColumn).getValue();
+        if (userKey) {
+            xoaUser(userKey, i);
         }
     }
 }
-
-function xoaNguoiDung(khoaNguoiDung, chiSoHang) {
-    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+function xoaUser(userKey, rowIndex) {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     try {
-        AdminDirectory.Users.remove(khoaNguoiDung);
-        bang.getRange(chiSoHang, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
-        Logger.log('Đã được xóa thành công: ' + khoaNguoiDung);
+        AdminDirectory.Users.remove(userKey);
+        sheet.getRange(rowIndex, 2).setValue('Delete Successfully').setBackground('#1E90FF');
+        Logger.log('User has been successfully deleted: ' + userKey);
     } catch (e) {
-        bang.getRange(chiSoHang, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
-        Logger.log('Lỗi khi xóa ' + khoaNguoiDung + ': ' + e.toString());
+        sheet.getRange(rowIndex, 2).setValue('Delete Error').setBackground('#FF0000');
+        Logger.log('Error while deleting user ' + userKey + ': ' + e.toString());
     }
 }

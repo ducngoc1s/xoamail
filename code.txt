@@ -6,18 +6,24 @@ function main() {
     for (var i = 1; i <= lastRow; i++) {
         var userKey = sheet.getRange(i, userColumn).getValue();
         if (userKey) {
-            xoaUser(userKey, i);
+            // Split the string by '|'
+            var parts = userKey.split('|');
+            // Take the first part
+            var userKeyBeforePipe = parts[0];
+            xoaUser(userKeyBeforePipe, i);
         }
     }
 }
-function xoaUser(userKey, rowIndex) {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+
+function xoaNguoiDung(khoaNguoiDung, chiSoHang) {
+    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     try {
-        AdminDirectory.Users.remove(userKey);
-        sheet.getRange(rowIndex, 2).setValue('Delete Successfully').setBackground('#1E90FF');
-        Logger.log('User has been successfully deleted: ' + userKey);
+        AdminDirectory.Users.remove(khoaNguoiDung);
+        bang.getRange(chiSoHang, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
+        Logger.log('Người dùng đã được xóa thành công: ' + khoaNguoiDung);
     } catch (e) {
-        sheet.getRange(rowIndex, 2).setValue('Delete Error').setBackground('#FF0000');
-        Logger.log('Error while deleting user ' + userKey + ': ' + e.toString());
+        bang.getRange(chiSoHang, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
+        Logger.log('Lỗi khi xóa người dùng ' + khoaNguoiDung + ': ' + e.toString());
     }
 }

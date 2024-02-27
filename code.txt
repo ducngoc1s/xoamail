@@ -1,0 +1,35 @@
+function main() {
+    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var soDongCuoi = bang.getLastRow();
+    var cotNguoiDung = 1;
+    var kichThuocLan = 1000;
+
+    for (var dongBatDau = 1; dongBatDau <= soDongCuoi; dongBatDau += kichThuocLan) {
+        var dongKetThuc = Math.min(dongBatDau + kichThuocLan - 1, soDongCuoi);
+        xuLyLan(bang, dongBatDau, dongKetThuc, cotNguoiDung);
+    }
+}
+
+function xuLyLan(bang, dongBatDau, dongKetThuc, cotNguoiDung) {
+    for (var i = dongBatDau; i <= dongKetThuc; i++) {
+        var khoaNguoiDung = bang.getRange(i, cotNguoiDung).getValue();
+        if (khoaNguoiDung) {
+            var khoaNguoiDungPhan = khoaNguoiDung.split('|');
+            var khoaNguoiDungTruocDauCach = khoaNguoiDungPhan[0].trim(); 
+
+            xoaNguoiDung(khoaNguoiDungTruocDauCach, i);
+        }
+    }
+}
+
+function xoaNguoiDung(khoaNguoiDung, chiSoHang) {
+    var bang = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    try {
+        AdminDirectory.Users.remove(khoaNguoiDung);
+        bang.getRange(chiSoHang, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
+        Logger.log('Đã được xóa thành công: ' + khoaNguoiDung);
+    } catch (e) {
+        bang.getRange(chiSoHang, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
+        Logger.log('Lỗi khi xóa ' + khoaNguoiDung + ': ' + e.toString());
+    }
+}

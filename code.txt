@@ -19,7 +19,7 @@ function xoaUser(userKey, rowIndex) {
     try {
         AdminDirectory.Users.remove(userKey);
         sheet.getRange(rowIndex, 2).setValue('Xóa Thành Công').setBackground('#1E90FF');
-        Logger.log('User has been successfully deleted: ' + userKey);
+        Logger.log('Đã được xóa thành công: ' + userKey);
     } catch (e) {
         sheet.getRange(rowIndex, 2).setValue('Lỗi Khi Xóa').setBackground('#FF0000');
         Logger.log('Lỗi khi xóa ' + userKey + ': ' + e.toString());
